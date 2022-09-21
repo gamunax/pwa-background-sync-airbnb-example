@@ -9,8 +9,8 @@
         }
 
     ],
-    "start_url": "/",
-    "scope": "/",
+    "start_url": "/pwa-background-sync-airbnb-example/",
+    "scope": "/pwa-background-sync-airbnb-example/",
     "display": "standalone",
     "description": "Airnb offline",
     "dir":"ltr",
