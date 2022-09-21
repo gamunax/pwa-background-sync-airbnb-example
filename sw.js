@@ -1,5 +1,9 @@
 importScripts('https://unpkg.com/dexie@3.2.2/dist/dexie.min.js');
 
+var CACHE_STATIC_NAME = 'static-v2';
+var CACHE_DYNAMIC_NAME = 'dynamic-v2';
+var CACHE_IMMUTABLE_NAME = 'immutable-v2';
+
 const STATIC_FILES = [
     'index.html',
     'app.js',
@@ -30,8 +34,8 @@ const INMUTABLE_FILES = [
 const ENDPOINT_NO_CACHE = ['api-mongo-mfory/endpoint/api', 'api-mongo-mfory/endpoint/register'];
 
 self.addEventListener('install', e => {
-    const cacheStatic = caches.open('static').then(cache => cache.addAll(STATIC_FILES));
-    const cacheInmutable = caches.open('inmutable').then(cache => cache.addAll(INMUTABLE_FILES));
+    const cacheStatic = caches.open(CACHE_STATIC_NAME).then(cache => cache.addAll(STATIC_FILES));
+    const cacheInmutable = caches.open(CACHE_IMMUTABLE_NAME).then(cache => cache.addAll(INMUTABLE_FILES));
     e.waitUntil(Promise.all([cacheStatic, cacheInmutable]));
 });
 
@@ -43,6 +47,18 @@ function dinamycCacheUpdate(dynamicCache, req, res) {
 }
 
 self.addEventListener('activate', e => {
+    e.waitUntil(
+        self.caches.keys().then(function(keySet) {
+            return Promise.all(
+                keySet.map(function(key) {
+                    if (key !== CACHE_STATIC_NAME && key !== CACHE_DYNAMIC_NAME && key !== CACHE_IMMUTABLE_NAME) {
+                        // * [Service Worker] removing old cache
+                        return self.caches.delete(key);
+                    }
+                })
+            );
+        })
+    );
     return self.clients.claim();
 });
 
@@ -65,7 +81,7 @@ self.addEventListener('fetch', e => {
         if (resp) return resp;
 
         return fetch(e.request).then(newRes => {
-            return dinamycCacheUpdate('dynamic', e.request, newRes);
+            return dinamycCacheUpdate(CACHE_DYNAMIC_NAME, e.request, newRes);
         });
     });
 
