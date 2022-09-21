@@ -25,6 +25,7 @@
     <body>
         <div class="container-fluid" ng-controller="mainController as ctrl">
             <header></header>
+            {{ctrl.syncing}}
 
             <!-- <input type="text" ng-model="name" class="mt-2" /> Hola <span ng-bind="name"></span> -->
             <button ng-if="online" class="btn btn-primary" ng-click="ctrl.download()">Download Data!</button>

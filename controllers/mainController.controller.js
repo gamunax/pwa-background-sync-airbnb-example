@@ -15,24 +15,47 @@
             Controller
         ]);
 
-    function Controller(airbnbService, IndexedDB, saveIndexedDB, IndexedDBMethods, syncIndexedDB, backgroundSync) {
+    function Controller(
+        airbnbService,
+        IndexedDB,
+        saveIndexedDB,
+        IndexedDBMethods,
+        syncIndexedDB,
+        backgroundSync,
+        $scope,
+        $rootScope
+    ) {
         const vm = this;
 
         IndexedDB.initialize();
         navigator.serviceWorker.register('./sw.js');
         backgroundSync.register();
 
+        vm.syncing = '';
         airbnbService.getAllReviews().then(function(response) {
             vm.results = response.data;
         });
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener('message', function handler(event) {
-                setTimeout(() => {
-                    location.reload();
-                }, 1000);
+                console.log(event);
+                if (event.data.type === 'syncing') {
+                    $rootScope.$broadcast('syncing', event.data.response);
+                }
+            });
+
+            navigator.serviceWorker.addEventListener('message', function handler(event) {
+                if (event.data.type === 'synced') {
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                }
             });
         }
+
+        $scope.$on('syncing', function(event, data) {
+            vm.syncing = data.lenght > 0 ? 'syncing....' : '';
+        });
 
         vm.download = function() {
             const data = vm.results.map(({ name, summary, beds, images: { picture_url } }) => {
@@ -88,29 +111,29 @@
                         picture_url:
                             'https://a0.muscache.com/im/pictures/6b3b1b1a-1b1a-4b1a-1b1a-1b1a1b1a1b1a.jpg?aki_policy=large'
                     }
+                },
+                {
+                    name: 'test name 4',
+                    summary: 'sumary test 4',
+                    beds: 5,
+                    status: 'modify',
+                    sync: false,
+                    images: {
+                        picture_url:
+                            'https://a0.muscache.com/im/pictures/6b3b1b1a-1b1a-4b1a-1b1a-1b1a1b1a1b1a.jpg?aki_policy=large'
+                    }
+                },
+                {
+                    name: 'test name 5',
+                    summary: 'sumary test 5',
+                    beds: 1,
+                    status: 'modify',
+                    sync: false,
+                    images: {
+                        picture_url:
+                            'https://a0.muscache.com/im/pictures/6b3b1b1a-1b1a-4b1a-1b1a-1b1a1b1a1b1a.jpg?aki_policy=large'
+                    }
                 }
-                // {
-                //     name: 'test name 4',
-                //     summary: 'sumary test 4',
-                //     beds: 5,
-                //     status: 'modify',
-                //     sync: false,
-                //     images: {
-                //         picture_url:
-                //             'https://a0.muscache.com/im/pictures/6b3b1b1a-1b1a-4b1a-1b1a-1b1a1b1a1b1a.jpg?aki_policy=large'
-                //     }
-                // },
-                // {
-                //     name: 'test name 5',
-                //     summary: 'sumary test 5',
-                //     beds: 1,
-                //     status: 'modify',
-                //     sync: false,
-                //     images: {
-                //         picture_url:
-                //             'https://a0.muscache.com/im/pictures/6b3b1b1a-1b1a-4b1a-1b1a-1b1a1b1a1b1a.jpg?aki_policy=large'
-                //     }
-                // },
                 // {
                 //     name: 'test name 6',
                 //     summary: 'sumary test 6',

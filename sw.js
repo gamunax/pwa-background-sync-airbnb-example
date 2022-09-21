@@ -118,6 +118,8 @@ function syncRentals() {
         });
 
     result.then(function(response) {
+        serviceWorkerMessage({ type: 'syncing', response: response });
+
         response.forEach(function({ name, summary, beds, images: { picture_url } }, index, array) {
             const request = {
                 name,
@@ -145,7 +147,7 @@ function syncRentals() {
                 });
 
                 if (array.length === index + 1) {
-                    serviceWorkerMessage(true);
+                    serviceWorkerMessage({ type: 'synced' });
                 }
             }, 2000 * index);
         });
