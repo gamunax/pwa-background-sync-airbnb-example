@@ -38,10 +38,7 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.addEventListener('message', function handler(event) {
-                console.log(event);
-                if (event.data.type === 'syncing') {
-                    $rootScope.$broadcast('syncing', event.data.response);
-                }
+                $rootScope.$broadcast('syncing', event.data.response);
             });
 
             navigator.serviceWorker.addEventListener('message', function handler(event) {
@@ -54,7 +51,12 @@
         }
 
         $scope.$on('syncing', function(event, data) {
-            vm.syncing = data.lenght > 0 ? 'syncing....' : '';
+            if (data.length > 0) {
+                const div = document.getElementById('syncing');
+                div.innerHTML = 'Syncing...';
+            }
+
+            // vm.syncing = data.lenght > 0 ? 'syncing....' : '';
         });
 
         vm.download = function() {
@@ -445,6 +447,7 @@
             function() {
                 $rootScope.$apply(function() {
                     $rootScope.online = false;
+                    location.reload();
                 });
             },
             false
@@ -454,6 +457,7 @@
             function() {
                 $rootScope.$apply(function() {
                     $rootScope.online = true;
+                    location.reload();
                 });
             },
             false

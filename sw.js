@@ -1,8 +1,8 @@
 importScripts('https://unpkg.com/dexie@3.2.2/dist/dexie.min.js');
 
-var CACHE_STATIC_NAME = 'static-v3';
-var CACHE_DYNAMIC_NAME = 'dynamic-v3';
-var CACHE_IMMUTABLE_NAME = 'immutable-v3';
+var CACHE_STATIC_NAME = 'static-v4';
+var CACHE_DYNAMIC_NAME = 'dynamic-v4';
+var CACHE_IMMUTABLE_NAME = 'immutable-v4';
 
 const STATIC_FILES = [
     'index.html',
@@ -130,6 +130,7 @@ function syncRentals() {
                 }
             };
             setTimeout(function() {
+                serviceWorkerMessage({ type: 'syncing', response: response });
                 const url = 'https://us-east-1.aws.data.mongodb-api.com/app/api-mongo-mfory/endpoint/register';
                 fetch(url, {
                     method: 'POST',
