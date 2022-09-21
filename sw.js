@@ -14,7 +14,9 @@ const STATIC_FILES = [
     'indexedDB/saveIndexedDB.factory.js',
     'indexedDB/getIndexedDB.factory.js',
     'indexedDB/syncIndexedDB.factory.js',
-    'serviceworker/backgroundSync.factory.js'
+    'serviceworker/backgroundSync.factory.js',
+    'assets/images/9306054_airbnb_icon.png',
+    'manifest.json'
 ];
 
 const INMUTABLE_FILES = [

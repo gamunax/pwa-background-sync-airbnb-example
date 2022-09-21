@@ -1,0 +1,19 @@
+{
+    "name": "Airnb Demo",
+    "short_name": "Airnb",
+    "icons": [
+        {
+            "src": "/assets/images/9306054_airbnb_icon.png",
+            "types": "image/png",
+            "sizes": "48x48"
+        }
+
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "description": "Airnb offline",
+    "dir":"ltr",
+    "lang":"en-US",
+    "theme_color": "#ff385c"
+}
