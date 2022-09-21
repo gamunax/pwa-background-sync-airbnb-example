@@ -1,8 +1,8 @@
 importScripts('https://unpkg.com/dexie@3.2.2/dist/dexie.min.js');
 
-var CACHE_STATIC_NAME = 'static-v2';
-var CACHE_DYNAMIC_NAME = 'dynamic-v2';
-var CACHE_IMMUTABLE_NAME = 'immutable-v2';
+var CACHE_STATIC_NAME = 'static-v3';
+var CACHE_DYNAMIC_NAME = 'dynamic-v3';
+var CACHE_IMMUTABLE_NAME = 'immutable-v3';
 
 const STATIC_FILES = [
     'index.html',
